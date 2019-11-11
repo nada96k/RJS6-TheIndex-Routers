@@ -12,20 +12,25 @@ class BookList extends Component {
     let filteredBooks = this.props.books.filter(book =>
       `${book.title} `.toLowerCase().includes(query)
     );
-    this.setState({ filteredBooks: filteredBooks });
+    this.setState({ filteredBooks });
   };
 
+  filterBooksByColor = bookColor =>
+    this.state.filteredBooks.filter(book => book.color === bookColor);
+
   render() {
-    const bookTable = this.state.filteredBooks.map(book => (
-      <BookTable key={book.id} book={book} />
-    ));
-    // console.log("Props", props);
+    const bookColor = this.props.match.params.bookColor;
+    let books = this.state.filteredBooks;
+    if (bookColor) {
+      books = this.filterBooksByColor(bookColor);
+      console.log("books if color is clicked", books);
+    }
     return (
       <div>
         <h3>Books</h3>
-        <SearchBar onChange={this.filterBooks} />
+        <SearchBar handleFilter={this.filterBooks} />
         <div className="row">
-          <BookTable books={this.props.books} />
+          <BookTable books={books} />
         </div>
       </div>
     );
